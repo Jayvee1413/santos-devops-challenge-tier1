@@ -1,0 +1,14 @@
+{
+  "availability-zones:account=961995546165:region=us-east-1": [
+    "us-east-1a",
+    "us-east-1b",
+    "us-east-1c",
+    "us-east-1d",
+    "us-east-1e",
+    "us-east-1f"
+  ],
+  "hosted-zone:account=961995546165:domainName=test1.swapoop.com:region=us-east-1": {
+    "Id": "/hostedzone/Z09764673ARVEV5Z6KFXS",
+    "Name": "test1.swapoop.com."
+  }
+}
