@@ -14,6 +14,6 @@ To run the CDK:
     2. Enable the generated CodeStar Connection in the AWS Console
     3. `cdk deploy JVSANTOSTier1BeanstalkAwsArchitectureStack --profile <aws_profile>`
     4. `cdk deploy JVSANTOSTier1CICDAwsArchitectureStack --profile <aws_profile>`
-    5. `cdk deploy JVSANTOSTier1CDNAwsArchitectureStack`
+    5. `cdk deploy JVSANTOSTier1CDNAwsArchitectureStack --profile <aws_profile>`
 7. If you just want to create the cloudformation templates, just run `cdk synth --profile <aws_profile> --all` 
    and the generated Cloudformation templates will be in `tier_1_aws_architecture/cdk.out`
