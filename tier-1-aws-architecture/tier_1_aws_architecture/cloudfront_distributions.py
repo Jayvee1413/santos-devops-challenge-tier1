@@ -27,6 +27,6 @@ def generate_cloudfront_distribution(scope, certificate, beanstalk_url):
                                                                    )],
                                                                    viewer_certificate=ViewerCertificate.from_acm_certificate(
                                                                        certificate=certificate,
-                                                                       aliases=["jvsantos-tier1.test1.swapoop.com"]),
+                                                                       aliases=["jvsantos-tier1.apperdevops.com"]),
                                                                    )
     return cloudfront_distribution
