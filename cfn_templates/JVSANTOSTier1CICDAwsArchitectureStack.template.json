@@ -1,0 +1,1381 @@
+{
+  "Resources": {
+    "PipelineBucketB967BD35": {
+      "Type": "AWS::S3::Bucket",
+      "Properties": {
+        "BucketName": "jvsantos-apper-pipeline-bucket-tier1",
+        "Tags": [
+          {
+            "Key": "Application",
+            "Value": "JVSANTOSTier1"
+          }
+        ]
+      },
+      "UpdateReplacePolicy": "Retain",
+      "DeletionPolicy": "Retain",
+      "Metadata": {
+        "aws:cdk:path": "JVSANTOSTier1CICDAwsArchitectureStack/PipelineBucket/Resource"
+      }
+    },
+    "Tier1PipelineServiceRoleED1C357E": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": [
+                  "codepipeline.amazonaws.com",
+                  "codebuild.amazonaws.com"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Application",
+            "Value": "JVSANTOSTier1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "JVSANTOSTier1CICDAwsArchitectureStack/Tier1PipelineServiceRole/Resource"
+      }
+    },
+    "Tier1PipelineServiceRoleDefaultPolicy9DCD44EB": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:Abort*"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "PipelineBucketB967BD35",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "PipelineBucketB967BD35",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "CodePipelineTier1SourceGithubCodePipelineActionRole13076323",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "CodePipelineTier1BuildcodebuildCodePipelineActionRole84C0E072",
+                  "Arn"
+                ]
+              }
+            },
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "Tier1PipelineServiceRoleED1C357E",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "Tier1PipelineServiceRoleDefaultPolicy9DCD44EB",
+        "Roles": [
+          {
+            "Ref": "Tier1PipelineServiceRoleED1C357E"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "JVSANTOSTier1CICDAwsArchitectureStack/Tier1PipelineServiceRole/DefaultPolicy/Resource"
+      }
+    },
+    "PipelinePolicy6285FFBE": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "iam:PassRole",
+              "Condition": {
+                "StringEquals": {
+                  "PassedToService": [
+                    "cloudformation.amazonaws.com",
+                    "elasticbeanstalk.amazonaws.com",
+                    "ec2.amazonaws.com",
+                    "ecs-tasks.amazonaws.com"
+                  ]
+                }
+              },
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": "codestar-connections:UseConnection",
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "codedeploy:CreateDeployment",
+                "codedeploy:GetApplication",
+                "codedeploy:GetApplicationRevision",
+                "codedeploy:GetDeployment",
+                "codedeploy:GetDeploymentConfig",
+                "codedeploy:RegisterApplicationRevision"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "elasticbeanstalk:*",
+                "ec2:*",
+                "elasticloadbalancing:*",
+                "autoscaling:*",
+                "cloudwatch:*",
+                "s3:*",
+                "sns:*",
+                "cloudformation:*",
+                "rds:*",
+                "sqs:*",
+                "ecs:*"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "lambda:InvokeFunction",
+                "lambda:ListFunctions"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "cloudformation:CreateStack",
+                "cloudformation:DeleteStack",
+                "cloudformation:DescribeStacks",
+                "cloudformation:UpdateStack",
+                "cloudformation:CreateChangeSet",
+                "cloudformation:DeleteChangeSet",
+                "cloudformation:DescribeChangeSet",
+                "cloudformation:ExecuteChangeSet",
+                "cloudformation:SetStackPolicy",
+                "cloudformation:ValidateTemplate"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:BatchGetBuildBatches",
+                "codebuild:StartBuildBatch"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "devicefarm:ListProjects",
+                "devicefarm:ListDevicePools",
+                "devicefarm:GetRun",
+                "devicefarm:GetUpload",
+                "devicefarm:CreateUpload",
+                "devicefarm:ScheduleRun"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "servicecatalog:ListProvisioningArtifacts",
+                "servicecatalog:CreateProvisioningArtifact",
+                "servicecatalog:DescribeProvisioningArtifact",
+                "servicecatalog:DeleteProvisioningArtifact",
+                "servicecatalog:UpdateProduct"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": "cloudformation:ValidateTemplate",
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "states:DescribeExecution",
+                "states:DescribeStateMachine",
+                "states:StartExecution"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "appconfig:StartDeployment",
+                "appconfig:StopDeployment",
+                "appconfig:GetDeployment"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": "ecr:DescribeImages",
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "pipeline-policy",
+        "Roles": [
+          {
+            "Ref": "Tier1PipelineServiceRoleED1C357E"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "JVSANTOSTier1CICDAwsArchitectureStack/PipelinePolicy/Resource"
+      }
+    },
+    "Tier1CodebuildServiceRole4A88A455": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "codebuild.amazonaws.com"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Application",
+            "Value": "JVSANTOSTier1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "JVSANTOSTier1CICDAwsArchitectureStack/Tier1CodebuildServiceRole/Resource"
+      }
+    },
+    "Tier1CodebuildServiceRoleDefaultPolicyD277210C": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "secretsmanager:GetSecretValue",
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":secretsmanager:us-east-1:329511059546:secret:",
+                      {
+                        "Fn::Join": [
+                          "-",
+                          [
+                            {
+                              "Fn::Select": [
+                                0,
+                                {
+                                  "Fn::Split": [
+                                    "-",
+                                    {
+                                      "Fn::Select": [
+                                        6,
+                                        {
+                                          "Fn::Split": [
+                                            ":",
+                                            {
+                                              "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Fn::Select": [
+                                1,
+                                {
+                                  "Fn::Split": [
+                                    "-",
+                                    {
+                                      "Fn::Select": [
+                                        6,
+                                        {
+                                          "Fn::Split": [
+                                            ":",
+                                            {
+                                              "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        ]
+                      },
+                      ":host-??????"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":secretsmanager:us-east-1:329511059546:secret:",
+                      {
+                        "Fn::Join": [
+                          "-",
+                          [
+                            {
+                              "Fn::Select": [
+                                0,
+                                {
+                                  "Fn::Split": [
+                                    "-",
+                                    {
+                                      "Fn::Select": [
+                                        6,
+                                        {
+                                          "Fn::Split": [
+                                            ":",
+                                            {
+                                              "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Fn::Select": [
+                                1,
+                                {
+                                  "Fn::Split": [
+                                    "-",
+                                    {
+                                      "Fn::Select": [
+                                        6,
+                                        {
+                                          "Fn::Split": [
+                                            ":",
+                                            {
+                                              "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        ]
+                      },
+                      ":username-??????"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":secretsmanager:us-east-1:329511059546:secret:",
+                      {
+                        "Fn::Join": [
+                          "-",
+                          [
+                            {
+                              "Fn::Select": [
+                                0,
+                                {
+                                  "Fn::Split": [
+                                    "-",
+                                    {
+                                      "Fn::Select": [
+                                        6,
+                                        {
+                                          "Fn::Split": [
+                                            ":",
+                                            {
+                                              "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Fn::Select": [
+                                1,
+                                {
+                                  "Fn::Split": [
+                                    "-",
+                                    {
+                                      "Fn::Select": [
+                                        6,
+                                        {
+                                          "Fn::Split": [
+                                            ":",
+                                            {
+                                              "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        ]
+                      },
+                      ":password-??????"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":secretsmanager:us-east-1:329511059546:secret:",
+                      {
+                        "Fn::Join": [
+                          "-",
+                          [
+                            {
+                              "Fn::Select": [
+                                0,
+                                {
+                                  "Fn::Split": [
+                                    "-",
+                                    {
+                                      "Fn::Select": [
+                                        6,
+                                        {
+                                          "Fn::Split": [
+                                            ":",
+                                            {
+                                              "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "Fn::Select": [
+                                1,
+                                {
+                                  "Fn::Split": [
+                                    "-",
+                                    {
+                                      "Fn::Select": [
+                                        6,
+                                        {
+                                          "Fn::Split": [
+                                            ":",
+                                            {
+                                              "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        ]
+                      },
+                      ":dbname-??????"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":logs:us-east-1:329511059546:log-group:/aws/codebuild/",
+                      {
+                        "Ref": "Tier1CodebuildProject9F849C9E"
+                      }
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":logs:us-east-1:329511059546:log-group:/aws/codebuild/",
+                      {
+                        "Ref": "Tier1CodebuildProject9F849C9E"
+                      },
+                      ":*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": [
+                "codebuild:CreateReportGroup",
+                "codebuild:CreateReport",
+                "codebuild:UpdateReport",
+                "codebuild:BatchPutTestCases",
+                "codebuild:BatchPutCodeCoverages"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":codebuild:us-east-1:329511059546:report-group/",
+                    {
+                      "Ref": "Tier1CodebuildProject9F849C9E"
+                    },
+                    "-*"
+                  ]
+                ]
+              }
+            },
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:Abort*"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "PipelineBucketB967BD35",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "PipelineBucketB967BD35",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            },
+            {
+              "Action": "codestar-connections:UseConnection",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputFnGetAttCodeStarConnectionConnectionArnAF592991"
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "Tier1CodebuildServiceRoleDefaultPolicyD277210C",
+        "Roles": [
+          {
+            "Ref": "Tier1CodebuildServiceRole4A88A455"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "JVSANTOSTier1CICDAwsArchitectureStack/Tier1CodebuildServiceRole/DefaultPolicy/Resource"
+      }
+    },
+    "Tier1CodebuildPolicy80356601": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "secretsmanager:GetSecretValue",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
+              }
+            },
+            {
+              "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "codebuild:CreateReportGroup",
+                "codebuild:CreateReport",
+                "codebuild:UpdateReport",
+                "codebuild:BatchPutTestCases",
+                "codebuild:BatchPutCodeCoverages"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:Abort*"
+              ],
+              "Effect": "Allow",
+              "Resource": "*"
+            },
+            {
+              "Action": "codestar-connections:UseConnection",
+              "Effect": "Allow",
+              "Resource": "*"
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "codebuild-policy",
+        "Roles": [
+          {
+            "Ref": "Tier1CodebuildServiceRole4A88A455"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "JVSANTOSTier1CICDAwsArchitectureStack/Tier1CodebuildPolicy/Resource"
+      }
+    },
+    "Tier1CodebuildProject9F849C9E": {
+      "Type": "AWS::CodeBuild::Project",
+      "Properties": {
+        "Artifacts": {
+          "Type": "CODEPIPELINE"
+        },
+        "Environment": {
+          "ComputeType": "BUILD_GENERAL1_SMALL",
+          "EnvironmentVariables": [
+            {
+              "Name": "HOST",
+              "Type": "SECRETS_MANAGER",
+              "Value": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Fn::Join": [
+                        "-",
+                        [
+                          {
+                            "Fn::Select": [
+                              0,
+                              {
+                                "Fn::Split": [
+                                  "-",
+                                  {
+                                    "Fn::Select": [
+                                      6,
+                                      {
+                                        "Fn::Split": [
+                                          ":",
+                                          {
+                                            "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "Fn::Select": [
+                              1,
+                              {
+                                "Fn::Split": [
+                                  "-",
+                                  {
+                                    "Fn::Select": [
+                                      6,
+                                      {
+                                        "Fn::Split": [
+                                          ":",
+                                          {
+                                            "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      ]
+                    },
+                    ":host"
+                  ]
+                ]
+              }
+            },
+            {
+              "Name": "USERNAME",
+              "Type": "SECRETS_MANAGER",
+              "Value": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Fn::Join": [
+                        "-",
+                        [
+                          {
+                            "Fn::Select": [
+                              0,
+                              {
+                                "Fn::Split": [
+                                  "-",
+                                  {
+                                    "Fn::Select": [
+                                      6,
+                                      {
+                                        "Fn::Split": [
+                                          ":",
+                                          {
+                                            "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "Fn::Select": [
+                              1,
+                              {
+                                "Fn::Split": [
+                                  "-",
+                                  {
+                                    "Fn::Select": [
+                                      6,
+                                      {
+                                        "Fn::Split": [
+                                          ":",
+                                          {
+                                            "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      ]
+                    },
+                    ":username"
+                  ]
+                ]
+              }
+            },
+            {
+              "Name": "PASSWORD",
+              "Type": "SECRETS_MANAGER",
+              "Value": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Fn::Join": [
+                        "-",
+                        [
+                          {
+                            "Fn::Select": [
+                              0,
+                              {
+                                "Fn::Split": [
+                                  "-",
+                                  {
+                                    "Fn::Select": [
+                                      6,
+                                      {
+                                        "Fn::Split": [
+                                          ":",
+                                          {
+                                            "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "Fn::Select": [
+                              1,
+                              {
+                                "Fn::Split": [
+                                  "-",
+                                  {
+                                    "Fn::Select": [
+                                      6,
+                                      {
+                                        "Fn::Split": [
+                                          ":",
+                                          {
+                                            "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      ]
+                    },
+                    ":password"
+                  ]
+                ]
+              }
+            },
+            {
+              "Name": "DATABASE",
+              "Type": "SECRETS_MANAGER",
+              "Value": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Fn::Join": [
+                        "-",
+                        [
+                          {
+                            "Fn::Select": [
+                              0,
+                              {
+                                "Fn::Split": [
+                                  "-",
+                                  {
+                                    "Fn::Select": [
+                                      6,
+                                      {
+                                        "Fn::Split": [
+                                          ":",
+                                          {
+                                            "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          },
+                          {
+                            "Fn::Select": [
+                              1,
+                              {
+                                "Fn::Split": [
+                                  "-",
+                                  {
+                                    "Fn::Select": [
+                                      6,
+                                      {
+                                        "Fn::Split": [
+                                          ":",
+                                          {
+                                            "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
+                                          }
+                                        ]
+                                      }
+                                    ]
+                                  }
+                                ]
+                              }
+                            ]
+                          }
+                        ]
+                      ]
+                    },
+                    ":dbname"
+                  ]
+                ]
+              }
+            },
+            {
+              "Name": "PORT",
+              "Type": "PLAINTEXT",
+              "Value": "1337"
+            }
+          ],
+          "Image": "aws/codebuild/standard:1.0",
+          "ImagePullCredentialsType": "CODEBUILD",
+          "PrivilegedMode": false,
+          "Type": "LINUX_CONTAINER"
+        },
+        "ServiceRole": {
+          "Fn::GetAtt": [
+            "Tier1CodebuildServiceRole4A88A455",
+            "Arn"
+          ]
+        },
+        "Source": {
+          "BuildSpec": "{\n  \"version\": 0.2,\n  \"phases\": {\n    \"install\": {\n      \"runtime-versions\": {\n        \"nodejs\": \"latest\"\n      }\n    },\n    \"build\": {\n      \"commands\": [\n        \"echo Build started on `date`\",\n        \"pwd\",\n        \"ls\",\n        \"cd express-minapp/\",\n        \"echo HOST=$HOST >> .env\",\n        \"echo USERNAME=$USERNAME >> .env\",\n        \"echo PASSWORD=$PASSWORD >> .env\",\n        \"echo DATABASE=$DATABASE >> .env\",\n        \"npm install\"\n      ]\n    },\n    \"post_build\": {\n      \"commands\": [\n        \"echo Build completed on `date`\"\n      ]\n    }\n  },\n  \"artifacts\": {\n    \"files\": [\n      \"package.json\",\n      \"src/index.js\",\n      \"src/middlewares.js\",\n      \"package-lock.json\",\n      \".env\"\n    ],\n    \"name\": \"express-minapp\",\n    \"base-directory\": \"express-minapp\"\n  },\n  \"cache\": {\n    \"paths\": [\n      \"node_modules/**/*\"\n    ]\n  }\n}",
+          "Type": "CODEPIPELINE"
+        },
+        "EncryptionKey": "alias/aws/s3",
+        "Name": "Tier1",
+        "Tags": [
+          {
+            "Key": "Application",
+            "Value": "JVSANTOSTier1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "JVSANTOSTier1CICDAwsArchitectureStack/Tier1CodebuildProject/Resource"
+      }
+    },
+    "CodePipelineTier16420E750": {
+      "Type": "AWS::CodePipeline::Pipeline",
+      "Properties": {
+        "RoleArn": {
+          "Fn::GetAtt": [
+            "Tier1PipelineServiceRoleED1C357E",
+            "Arn"
+          ]
+        },
+        "Stages": [
+          {
+            "Actions": [
+              {
+                "ActionTypeId": {
+                  "Category": "Source",
+                  "Owner": "AWS",
+                  "Provider": "CodeStarSourceConnection",
+                  "Version": "1"
+                },
+                "Configuration": {
+                  "ConnectionArn": {
+                    "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputFnGetAttCodeStarConnectionConnectionArnAF592991"
+                  },
+                  "FullRepositoryId": "Jayvee1413/tier1",
+                  "BranchName": "master",
+                  "OutputArtifactFormat": "CODEBUILD_CLONE_REF"
+                },
+                "Name": "Github",
+                "OutputArtifacts": [
+                  {
+                    "Name": "SourceOutput"
+                  }
+                ],
+                "RoleArn": {
+                  "Fn::GetAtt": [
+                    "CodePipelineTier1SourceGithubCodePipelineActionRole13076323",
+                    "Arn"
+                  ]
+                },
+                "RunOrder": 1
+              }
+            ],
+            "Name": "Source"
+          },
+          {
+            "Actions": [
+              {
+                "ActionTypeId": {
+                  "Category": "Build",
+                  "Owner": "AWS",
+                  "Provider": "CodeBuild",
+                  "Version": "1"
+                },
+                "Configuration": {
+                  "ProjectName": {
+                    "Ref": "Tier1CodebuildProject9F849C9E"
+                  }
+                },
+                "InputArtifacts": [
+                  {
+                    "Name": "SourceOutput"
+                  }
+                ],
+                "Name": "codebuild",
+                "OutputArtifacts": [
+                  {
+                    "Name": "CodebuildOutput"
+                  }
+                ],
+                "RoleArn": {
+                  "Fn::GetAtt": [
+                    "CodePipelineTier1BuildcodebuildCodePipelineActionRole84C0E072",
+                    "Arn"
+                  ]
+                },
+                "RunOrder": 2
+              }
+            ],
+            "Name": "Build"
+          },
+          {
+            "Actions": [
+              {
+                "ActionTypeId": {
+                  "Category": "Deploy",
+                  "Owner": "AWS",
+                  "Provider": "ElasticBeanstalk",
+                  "Version": "1"
+                },
+                "Configuration": {
+                  "ApplicationName": "Tier1 Application",
+                  "EnvironmentName": "Tier1-Environment"
+                },
+                "InputArtifacts": [
+                  {
+                    "Name": "CodebuildOutput"
+                  }
+                ],
+                "Name": "Deploy",
+                "RoleArn": {
+                  "Fn::GetAtt": [
+                    "Tier1PipelineServiceRoleED1C357E",
+                    "Arn"
+                  ]
+                },
+                "RunOrder": 1
+              }
+            ],
+            "Name": "Deploy"
+          }
+        ],
+        "ArtifactStore": {
+          "Location": {
+            "Ref": "PipelineBucketB967BD35"
+          },
+          "Type": "S3"
+        },
+        "Name": "jvsantos-pipeline-tier1",
+        "Tags": [
+          {
+            "Key": "Application",
+            "Value": "JVSANTOSTier1"
+          }
+        ]
+      },
+      "DependsOn": [
+        "Tier1PipelineServiceRoleDefaultPolicy9DCD44EB",
+        "Tier1PipelineServiceRoleED1C357E"
+      ],
+      "Metadata": {
+        "aws:cdk:path": "JVSANTOSTier1CICDAwsArchitectureStack/CodePipelineTier1/Resource"
+      }
+    },
+    "CodePipelineTier1SourceGithubCodePipelineActionRole13076323": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::329511059546:root"
+                    ]
+                  ]
+                }
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Application",
+            "Value": "JVSANTOSTier1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "JVSANTOSTier1CICDAwsArchitectureStack/CodePipelineTier1/Source/Github/CodePipelineActionRole/Resource"
+      }
+    },
+    "CodePipelineTier1SourceGithubCodePipelineActionRoleDefaultPolicy11040E4C": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "codestar-connections:UseConnection",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputFnGetAttCodeStarConnectionConnectionArnAF592991"
+              }
+            },
+            {
+              "Action": [
+                "s3:GetObject*",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+                "s3:PutObject",
+                "s3:Abort*"
+              ],
+              "Effect": "Allow",
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "PipelineBucketB967BD35",
+                    "Arn"
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "PipelineBucketB967BD35",
+                          "Arn"
+                        ]
+                      },
+                      "/*"
+                    ]
+                  ]
+                }
+              ]
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "CodePipelineTier1SourceGithubCodePipelineActionRoleDefaultPolicy11040E4C",
+        "Roles": [
+          {
+            "Ref": "CodePipelineTier1SourceGithubCodePipelineActionRole13076323"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "JVSANTOSTier1CICDAwsArchitectureStack/CodePipelineTier1/Source/Github/CodePipelineActionRole/DefaultPolicy/Resource"
+      }
+    },
+    "CodePipelineTier1BuildcodebuildCodePipelineActionRole84C0E072": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":iam::329511059546:root"
+                    ]
+                  ]
+                }
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "Tags": [
+          {
+            "Key": "Application",
+            "Value": "JVSANTOSTier1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "JVSANTOSTier1CICDAwsArchitectureStack/CodePipelineTier1/Build/codebuild/CodePipelineActionRole/Resource"
+      }
+    },
+    "CodePipelineTier1BuildcodebuildCodePipelineActionRoleDefaultPolicyDF117C31": {
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:StopBuild"
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "Tier1CodebuildProject9F849C9E",
+                  "Arn"
+                ]
+              }
+            }
+          ],
+          "Version": "2012-10-17"
+        },
+        "PolicyName": "CodePipelineTier1BuildcodebuildCodePipelineActionRoleDefaultPolicyDF117C31",
+        "Roles": [
+          {
+            "Ref": "CodePipelineTier1BuildcodebuildCodePipelineActionRole84C0E072"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "JVSANTOSTier1CICDAwsArchitectureStack/CodePipelineTier1/Build/codebuild/CodePipelineActionRole/DefaultPolicy/Resource"
+      }
+    },
+    "CDKMetadata": {
+      "Type": "AWS::CDK::Metadata",
+      "Properties": {
+        "Analytics": "v2:deflate64:H4sIAAAAAAAACkWNTQqDQAyFz9L9GBG7sLtSLyD2BDamNDpOZH4oMszdi47Q1fvC+x6p4HaF6nIfvq7AcS4jiiWITz/grFoxztuAXrVv05OTYJGS2t3oaoiPgDMdZaakeFgg9qLpWOzZiWbc9jNTUigjvQLrEWLHK2k21FmZKL85MWvr2f/NQzk5paS6zX/ElDU00Fwmx1zYYDwvBH3OH7p15oLhAAAA"
+      },
+      "Metadata": {
+        "aws:cdk:path": "JVSANTOSTier1CICDAwsArchitectureStack/CDKMetadata/Default"
+      }
+    }
+  }
+}

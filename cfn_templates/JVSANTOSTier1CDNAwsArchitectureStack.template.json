@@ -1,0 +1,135 @@
+{
+  "Outputs": {
+    "EBURL": {
+      "Value": {
+        "Fn::ImportValue": "JVSANTOSTier1BeanstalkAwsArchitectureStack:ExportsOutputFnGetAttBeanstalkEnvironmentEndpointURL7DF3B919"
+      }
+    }
+  },
+  "Resources": {
+    "Tier1CloudfrontDistributionCFDistribution28899C7C": {
+      "Type": "AWS::CloudFront::Distribution",
+      "Properties": {
+        "DistributionConfig": {
+          "Aliases": [
+            "jvsantos-tier1.apperdevops.com"
+          ],
+          "DefaultCacheBehavior": {
+            "AllowedMethods": [
+              "DELETE",
+              "GET",
+              "HEAD",
+              "OPTIONS",
+              "PATCH",
+              "POST",
+              "PUT"
+            ],
+            "CachedMethods": [
+              "GET",
+              "HEAD"
+            ],
+            "Compress": true,
+            "ForwardedValues": {
+              "Cookies": {
+                "Forward": "all"
+              },
+              "Headers": [
+                "*"
+              ],
+              "QueryString": true
+            },
+            "TargetOriginId": "origin1",
+            "ViewerProtocolPolicy": "redirect-to-https"
+          },
+          "DefaultRootObject": "",
+          "Enabled": true,
+          "HttpVersion": "http2",
+          "IPV6Enabled": true,
+          "Origins": [
+            {
+              "ConnectionAttempts": 3,
+              "ConnectionTimeout": 10,
+              "CustomOriginConfig": {
+                "HTTPPort": 80,
+                "HTTPSPort": 443,
+                "OriginKeepaliveTimeout": 5,
+                "OriginProtocolPolicy": "match-viewer",
+                "OriginReadTimeout": 30,
+                "OriginSSLProtocols": [
+                  "TLSv1.2"
+                ]
+              },
+              "DomainName": {
+                "Fn::ImportValue": "JVSANTOSTier1BeanstalkAwsArchitectureStack:ExportsOutputFnGetAttBeanstalkEnvironmentEndpointURL7DF3B919"
+              },
+              "Id": "origin1"
+            }
+          ],
+          "PriceClass": "PriceClass_100",
+          "ViewerCertificate": {
+            "AcmCertificateArn": {
+              "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1ACMCertificate95EAA15BF9B6C393"
+            },
+            "SslSupportMethod": "sni-only"
+          }
+        },
+        "Tags": [
+          {
+            "Key": "Application",
+            "Value": "JVSANTOSTier1"
+          }
+        ]
+      },
+      "Metadata": {
+        "aws:cdk:path": "JVSANTOSTier1CDNAwsArchitectureStack/Tier1CloudfrontDistribution/CFDistribution"
+      }
+    },
+    "CloudfrontTier1Route53ARecordA1187EF4": {
+      "Type": "AWS::Route53::RecordSet",
+      "Properties": {
+        "Name": "jvsantos-tier1.apperdevops.com.",
+        "Type": "A",
+        "AliasTarget": {
+          "DNSName": {
+            "Fn::GetAtt": [
+              "Tier1CloudfrontDistributionCFDistribution28899C7C",
+              "DomainName"
+            ]
+          },
+          "HostedZoneId": {
+            "Fn::FindInMap": [
+              "AWSCloudFrontPartitionHostedZoneIdMap",
+              {
+                "Ref": "AWS::Partition"
+              },
+              "zoneId"
+            ]
+          }
+        },
+        "HostedZoneId": "Z04135332RXQPQVNH7G61"
+      },
+      "Metadata": {
+        "aws:cdk:path": "JVSANTOSTier1CDNAwsArchitectureStack/CloudfrontTier1Route53ARecord/Resource"
+      }
+    },
+    "CDKMetadata": {
+      "Type": "AWS::CDK::Metadata",
+      "Properties": {
+        "Analytics": "v2:deflate64:H4sIAAAAAAAACk2NwQ6CMBBEv4V7XULQBG8ajDejgYNnKItWtEvKboxp+u9SuXiaN5PMTAbbNWTJrnlPK90NqdfkEHzNjR5U2duz8Cgc6dSMo7E3VZKd2In+hRVOJE5jUHHA6ydJ1zuyDL6MfIx8xfZg5o5phQ3Z2Pv3QTkSxk0Ofl/h/N8ty5Fq5BCCunz4TjbNoYAieUzGrJxYNi+EatEvrpRPwMcAAAA="
+      },
+      "Metadata": {
+        "aws:cdk:path": "JVSANTOSTier1CDNAwsArchitectureStack/CDKMetadata/Default"
+      }
+    }
+  },
+  "Mappings": {
+    "AWSCloudFrontPartitionHostedZoneIdMap": {
+      "aws": {
+        "zoneId": "Z2FDTNDATAQYW2"
+      },
+      "aws-cn": {
+        "zoneId": "Z3RFFRIM2A3IF5"
+      }
+    }
+  }
+}
