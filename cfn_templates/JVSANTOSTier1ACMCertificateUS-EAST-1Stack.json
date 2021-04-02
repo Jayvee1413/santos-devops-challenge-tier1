@@ -1,0 +1,36 @@
+{
+  "Resources": {
+    "JVSANTOSTier1ACMCertificate": {
+      "Type": "AWS::CertificateManager::Certificate",
+      "Properties": {
+        "DomainName": "jvsantos-tier1.apperdevops.com",
+        "DomainValidationOptions": [
+          {
+            "DomainName": "jvsantos-tier1.apperdevops.com",
+            "HostedZoneId": "Z04135332RXQPQVNH7G61"
+          }
+        ],
+        "SubjectAlternativeNames": [
+          "*.jvsantos-tier1.apperdevops.com"
+        ],
+        "Tags": [
+          {
+            "Key": "Name",
+            "Value": "jvsantos.tier1"
+          }
+        ],
+        "ValidationMethod": "DNS"
+      },
+    },
+  },
+  "Outputs": {
+    "OutputJVSANTOSTier1ACMCertificate": {
+      "Value": {
+        "Ref": "JVSANTOSTier1ACMCertificate"
+      },
+      "Export": {
+        "Name": "JVSANTOSTier1ACMCertificateUS-EAST-1Stack:OutputJVSANTOSTier1ACMCertificate"
+      }
+    },
+  }
+}

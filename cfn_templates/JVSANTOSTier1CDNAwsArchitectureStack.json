@@ -60,9 +60,7 @@
           ],
           "PriceClass": "PriceClass_100",
           "ViewerCertificate": {
-            "AcmCertificateArn": {
-              "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:OutputJVSANTOSTier1ACMCertificate"
-            },
+            "AcmCertificateArn": "arn:aws:acm:us-east-1:329511059546:certificate/eb486d8c-ad37-4834-bc0f-82dbb29137fd",
             "SslSupportMethod": "sni-only"
           }
         },
