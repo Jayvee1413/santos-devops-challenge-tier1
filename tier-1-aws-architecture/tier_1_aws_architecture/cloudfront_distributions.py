@@ -5,7 +5,7 @@ from aws_cdk.aws_cloudfront import SourceConfiguration, CustomOriginConfig, View
 
 def generate_cloudfront_distribution(scope, certificate, beanstalk_url):
     cloudfront_distribution = cloudfront.CloudFrontWebDistribution(scope=scope,
-                                                                   id="Tier1CloudfrontDistribution",
+                                                                   id="JVSANTOSTier1CloudfrontDistribution",
                                                                    default_root_object="",
                                                                    origin_configs=[SourceConfiguration(
                                                                        custom_origin_source=CustomOriginConfig(

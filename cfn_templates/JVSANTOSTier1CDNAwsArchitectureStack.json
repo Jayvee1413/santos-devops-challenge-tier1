@@ -1,13 +1,6 @@
 {
-  "Outputs": {
-    "EBURL": {
-      "Value": {
-        "Fn::ImportValue": "JVSANTOSTier1BeanstalkAwsArchitectureStack:ExportsOutputFnGetAttBeanstalkEnvironmentEndpointURL7DF3B919"
-      }
-    }
-  },
   "Resources": {
-    "Tier1CloudfrontDistributionCFDistribution28899C7C": {
+    "JVSANTOSTier1CloudfrontDistributionCFDistribution": {
       "Type": "AWS::CloudFront::Distribution",
       "Properties": {
         "DistributionConfig": {
@@ -60,7 +53,7 @@
                 ]
               },
               "DomainName": {
-                "Fn::ImportValue": "JVSANTOSTier1BeanstalkAwsArchitectureStack:ExportsOutputFnGetAttBeanstalkEnvironmentEndpointURL7DF3B919"
+                "Fn::ImportValue": "JVSANTOSTier1BeanstalkAwsArchitectureStack:OutputJVSANTOSTier1BeanstalkEnvironmentEndpointURL"
               },
               "Id": "origin1"
             }
@@ -68,23 +61,20 @@
           "PriceClass": "PriceClass_100",
           "ViewerCertificate": {
             "AcmCertificateArn": {
-              "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1ACMCertificate95EAA15BF9B6C393"
+              "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:OutputJVSANTOSTier1ACMCertificate"
             },
             "SslSupportMethod": "sni-only"
           }
         },
         "Tags": [
           {
-            "Key": "Application",
-            "Value": "JVSANTOSTier1"
+            "Key": "Name",
+            "Value": "jvsantos.tier1"
           }
         ]
-      },
-      "Metadata": {
-        "aws:cdk:path": "JVSANTOSTier1CDNAwsArchitectureStack/Tier1CloudfrontDistribution/CFDistribution"
       }
     },
-    "CloudfrontTier1Route53ARecordA1187EF4": {
+    "CloudfrontTier1Route53ARecord": {
       "Type": "AWS::Route53::RecordSet",
       "Properties": {
         "Name": "jvsantos-tier1.apperdevops.com.",
@@ -92,7 +82,7 @@
         "AliasTarget": {
           "DNSName": {
             "Fn::GetAtt": [
-              "Tier1CloudfrontDistributionCFDistribution28899C7C",
+              "JVSANTOSTier1CloudfrontDistributionCFDistribution",
               "DomainName"
             ]
           },
@@ -107,18 +97,6 @@
           }
         },
         "HostedZoneId": "Z04135332RXQPQVNH7G61"
-      },
-      "Metadata": {
-        "aws:cdk:path": "JVSANTOSTier1CDNAwsArchitectureStack/CloudfrontTier1Route53ARecord/Resource"
-      }
-    },
-    "CDKMetadata": {
-      "Type": "AWS::CDK::Metadata",
-      "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAACk2NwQ6CMBBEv4V7XULQBG8ajDejgYNnKItWtEvKboxp+u9SuXiaN5PMTAbbNWTJrnlPK90NqdfkEHzNjR5U2duz8Cgc6dSMo7E3VZKd2In+hRVOJE5jUHHA6ydJ1zuyDL6MfIx8xfZg5o5phQ3Z2Pv3QTkSxk0Ofl/h/N8ty5Fq5BCCunz4TjbNoYAieUzGrJxYNi+EatEvrpRPwMcAAAA="
-      },
-      "Metadata": {
-        "aws:cdk:path": "JVSANTOSTier1CDNAwsArchitectureStack/CDKMetadata/Default"
       }
     }
   },
@@ -129,6 +107,13 @@
       },
       "aws-cn": {
         "zoneId": "Z3RFFRIM2A3IF5"
+      }
+    }
+  },
+  "Outputs": {
+    "JVSantosTier1Domain": {
+      "Value": {
+        "Ref": "CloudfrontTier1Route53ARecord"
       }
     }
   }

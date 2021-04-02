@@ -53,9 +53,9 @@ def generate_buildspec():
 
 def generate_codebuild_project(scope, role, db_secret):
     codebuild_project = codebuild.PipelineProject(scope=scope,
-                                                  id="Tier1CodebuildProject",
+                                                  id="JVSANTOSTier1CodebuildProject",
                                                   build_spec=generate_buildspec(),
-                                                  project_name="Tier1",
+                                                  project_name="JVSANTOSTier1",
                                                   role=role,
                                                   environment=codebuild.LinuxBuildImage.AMAZON_LINUX_2_3,
                                                   environment_variables=

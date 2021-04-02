@@ -11,7 +11,7 @@ def generate_pipeline_stages(codebuild_project, role, beanstalk_application, bea
                                                codepipeline_actions.BitBucketSourceAction(
                                                    connection_arn=codestar_connection.attr_connection_arn,
                                                    output=source_output,
-                                                   repo="tier1",
+                                                   repo="santos-devops-challenge-tier1",
                                                    owner="Jayvee1413",
                                                    action_name="Github",
                                                    code_build_clone_output=True,
@@ -46,7 +46,7 @@ def generate_pipeline_stages(codebuild_project, role, beanstalk_application, bea
 def generate_pipeline(scope, bucket, role, codebuild_project, beanstalk_application, beanstalk_environment,
                       codestar_connection):
     pipeline = codepipeline.Pipeline(scope=scope,
-                                     id="CodePipelineTier1",
+                                     id="JVSANTOSCodePipelineTier1",
                                      artifact_bucket=bucket,
                                      pipeline_name="jvsantos-pipeline-tier1",
                                      role=role,
@@ -56,4 +56,5 @@ def generate_pipeline(scope, bucket, role, codebuild_project, beanstalk_applicat
                                                                      beanstalk_environment=beanstalk_environment,
                                                                      codestar_connection=codestar_connection)
                                      )
+    # pipeline.
     return pipeline

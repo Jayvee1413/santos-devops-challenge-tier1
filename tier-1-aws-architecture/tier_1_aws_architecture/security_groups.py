@@ -5,9 +5,9 @@ from aws_cdk.core import Tags
 def generate_load_balancer_security_group(scope, vpc):
     sg = ec2.SecurityGroup(
         scope=scope,
-        id="BeanstalkApplicationLoadBalancerSG",
+        id="JVSANTOSBeanstalkApplicationLoadBalancerSG",
         description="Application Load Balancer Security Group",
-        security_group_name="BeanstalkApplicationLoadBalancerSG",
+        security_group_name="JVSANTOSBeanstalkApplicationLoadBalancerSG",
         vpc=vpc,
         allow_all_outbound=True
     )
@@ -17,7 +17,6 @@ def generate_load_balancer_security_group(scope, vpc):
         peer=ec2.Peer.any_ipv4(),
         connection=ec2.Port.tcp(443)
     )
-    Tags.of(sg).add(key="Name", value="BeanstalkApplicationLoadBalancerSG")
 
     return sg
 
@@ -25,9 +24,9 @@ def generate_load_balancer_security_group(scope, vpc):
 def generate_beanstalk_app_security_group(scope, vpc: ec2.Vpc, load_balancer_sg: ec2.SecurityGroup):
     sg = ec2.SecurityGroup(
         scope=scope,
-        id="BeanstalkApplicationSG",
+        id="JVSANTOSBeanstalkApplicationSG",
         description="Beanstalk Application Security Group",
-        security_group_name="BeanstalkApplicationSG",
+        security_group_name="JVSANTOSBeanstalkApplicationSG",
         vpc=vpc,
         allow_all_outbound=False
     )
@@ -49,17 +48,15 @@ def generate_beanstalk_app_security_group(scope, vpc: ec2.Vpc, load_balancer_sg:
         connection=ec2.Port.tcp_range(start_port=1024, end_port=65535),
     )
 
-    Tags.of(sg).add(key="Name", value="BeanstalkApplicationSG")
-
     return sg
 
 
 def generate_rds_security_group(scope, vpc: ec2.Vpc, beanstalk_app_sg: ec2.SecurityGroup):
     sg = ec2.SecurityGroup(
         scope=scope,
-        id="RDSSG",
+        id="JVSANTOSRDSSG",
         description="RDS MySQL Security Group",
-        security_group_name="RDSSG",
+        security_group_name="JVSANTOSRDSSG",
         vpc=vpc,
         allow_all_outbound=False
     )
@@ -75,7 +72,5 @@ def generate_rds_security_group(scope, vpc: ec2.Vpc, beanstalk_app_sg: ec2.Secur
         peer=beanstalk_app_sg,
         connection=ec2.Port.tcp_range(start_port=1024, end_port=65535),
     )
-
-    Tags.of(sg).add(key="Name", value="RDSSG")
 
     return sg

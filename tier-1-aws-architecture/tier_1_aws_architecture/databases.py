@@ -5,7 +5,7 @@ from aws_cdk.core import RemovalPolicy
 
 def generate_db_secret(scope):
     secret = rds.DatabaseSecret(scope=scope,
-                                id="Tier1RDSSecret",
+                                id="JVSANTOSTier1RDSSecret",
                                 username="tier1user",
                                 )
 
@@ -16,7 +16,7 @@ def generate_db_instance(scope, vpc, security_group, db_secret):
     credentials = rds.Credentials.from_secret(db_secret)
 
     rds_instance = rds.DatabaseInstance(scope=scope,
-                                        id="Tier1RDS",
+                                        id="JVSANTOSTier1RDS",
                                         engine=rds.DatabaseInstanceEngine.MYSQL,
                                         credentials=credentials,
                                         instance_type=ec2.InstanceType.of(

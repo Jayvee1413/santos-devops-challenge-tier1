@@ -1,23 +1,20 @@
 {
   "Resources": {
-    "PipelineBucketB967BD35": {
+    "JVSANTOSPipelineBucket": {
       "Type": "AWS::S3::Bucket",
       "Properties": {
         "BucketName": "jvsantos-apper-pipeline-bucket-tier1",
         "Tags": [
           {
-            "Key": "Application",
-            "Value": "JVSANTOSTier1"
+            "Key": "Name",
+            "Value": "jvsantos.tier1"
           }
         ]
       },
       "UpdateReplacePolicy": "Retain",
       "DeletionPolicy": "Retain",
-      "Metadata": {
-        "aws:cdk:path": "JVSANTOSTier1CICDAwsArchitectureStack/PipelineBucket/Resource"
-      }
     },
-    "Tier1PipelineServiceRoleED1C357E": {
+    "JVSANTOSTier1PipelineServiceRole": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -35,18 +32,16 @@
           ],
           "Version": "2012-10-17"
         },
+        "RoleName": "JVSANTOSTier1PipelineServiceRole",
         "Tags": [
           {
-            "Key": "Application",
-            "Value": "JVSANTOSTier1"
+            "Key": "Name",
+            "Value": "jvsantos.tier1"
           }
         ]
       },
-      "Metadata": {
-        "aws:cdk:path": "JVSANTOSTier1CICDAwsArchitectureStack/Tier1PipelineServiceRole/Resource"
-      }
     },
-    "Tier1PipelineServiceRoleDefaultPolicy9DCD44EB": {
+    "JVSANTOSTier1PipelineServiceRoleDefaultPolicy": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
@@ -64,7 +59,7 @@
               "Resource": [
                 {
                   "Fn::GetAtt": [
-                    "PipelineBucketB967BD35",
+                    "JVSANTOSPipelineBucket",
                     "Arn"
                   ]
                 },
@@ -74,7 +69,7 @@
                     [
                       {
                         "Fn::GetAtt": [
-                          "PipelineBucketB967BD35",
+                          "JVSANTOSPipelineBucket",
                           "Arn"
                         ]
                       },
@@ -89,7 +84,7 @@
               "Effect": "Allow",
               "Resource": {
                 "Fn::GetAtt": [
-                  "CodePipelineTier1SourceGithubCodePipelineActionRole13076323",
+                  "JVSANTOSCodePipelineTier1SourceGithubCodePipelineActionRole",
                   "Arn"
                 ]
               }
@@ -99,7 +94,7 @@
               "Effect": "Allow",
               "Resource": {
                 "Fn::GetAtt": [
-                  "CodePipelineTier1BuildcodebuildCodePipelineActionRole84C0E072",
+                  "JVSANTOSCodePipelineTier1BuildcodebuildCodePipelineActionRole",
                   "Arn"
                 ]
               }
@@ -109,7 +104,7 @@
               "Effect": "Allow",
               "Resource": {
                 "Fn::GetAtt": [
-                  "Tier1PipelineServiceRoleED1C357E",
+                  "JVSANTOSTier1PipelineServiceRole",
                   "Arn"
                 ]
               }
@@ -117,18 +112,15 @@
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "Tier1PipelineServiceRoleDefaultPolicy9DCD44EB",
+        "PolicyName": "JVSANTOSTier1PipelineServiceRoleDefaultPolicy",
         "Roles": [
           {
-            "Ref": "Tier1PipelineServiceRoleED1C357E"
+            "Ref": "JVSANTOSTier1PipelineServiceRole"
           }
         ]
       },
-      "Metadata": {
-        "aws:cdk:path": "JVSANTOSTier1CICDAwsArchitectureStack/Tier1PipelineServiceRole/DefaultPolicy/Resource"
-      }
     },
-    "PipelinePolicy6285FFBE": {
+    "JVSANTOSPipelinePolicy": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
@@ -270,18 +262,15 @@
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "pipeline-policy",
+        "PolicyName": "JVSANTOS-pipeline-policy",
         "Roles": [
           {
-            "Ref": "Tier1PipelineServiceRoleED1C357E"
+            "Ref": "JVSANTOSTier1PipelineServiceRole"
           }
         ]
       },
-      "Metadata": {
-        "aws:cdk:path": "JVSANTOSTier1CICDAwsArchitectureStack/PipelinePolicy/Resource"
-      }
     },
-    "Tier1CodebuildServiceRole4A88A455": {
+    "JVSANTOSTier1CodebuildServiceRole": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -296,414 +285,16 @@
           ],
           "Version": "2012-10-17"
         },
+        "RoleName": "JVSANTOSTier1CodebuildServiceRole",
         "Tags": [
           {
-            "Key": "Application",
-            "Value": "JVSANTOSTier1"
+            "Key": "Name",
+            "Value": "jvsantos.tier1"
           }
         ]
       },
-      "Metadata": {
-        "aws:cdk:path": "JVSANTOSTier1CICDAwsArchitectureStack/Tier1CodebuildServiceRole/Resource"
-      }
     },
-    "Tier1CodebuildServiceRoleDefaultPolicyD277210C": {
-      "Type": "AWS::IAM::Policy",
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "secretsmanager:GetSecretValue",
-              "Effect": "Allow",
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":secretsmanager:us-east-1:329511059546:secret:",
-                      {
-                        "Fn::Join": [
-                          "-",
-                          [
-                            {
-                              "Fn::Select": [
-                                0,
-                                {
-                                  "Fn::Split": [
-                                    "-",
-                                    {
-                                      "Fn::Select": [
-                                        6,
-                                        {
-                                          "Fn::Split": [
-                                            ":",
-                                            {
-                                              "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "Fn::Select": [
-                                1,
-                                {
-                                  "Fn::Split": [
-                                    "-",
-                                    {
-                                      "Fn::Select": [
-                                        6,
-                                        {
-                                          "Fn::Split": [
-                                            ":",
-                                            {
-                                              "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        ]
-                      },
-                      ":host-??????"
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":secretsmanager:us-east-1:329511059546:secret:",
-                      {
-                        "Fn::Join": [
-                          "-",
-                          [
-                            {
-                              "Fn::Select": [
-                                0,
-                                {
-                                  "Fn::Split": [
-                                    "-",
-                                    {
-                                      "Fn::Select": [
-                                        6,
-                                        {
-                                          "Fn::Split": [
-                                            ":",
-                                            {
-                                              "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "Fn::Select": [
-                                1,
-                                {
-                                  "Fn::Split": [
-                                    "-",
-                                    {
-                                      "Fn::Select": [
-                                        6,
-                                        {
-                                          "Fn::Split": [
-                                            ":",
-                                            {
-                                              "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        ]
-                      },
-                      ":username-??????"
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":secretsmanager:us-east-1:329511059546:secret:",
-                      {
-                        "Fn::Join": [
-                          "-",
-                          [
-                            {
-                              "Fn::Select": [
-                                0,
-                                {
-                                  "Fn::Split": [
-                                    "-",
-                                    {
-                                      "Fn::Select": [
-                                        6,
-                                        {
-                                          "Fn::Split": [
-                                            ":",
-                                            {
-                                              "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "Fn::Select": [
-                                1,
-                                {
-                                  "Fn::Split": [
-                                    "-",
-                                    {
-                                      "Fn::Select": [
-                                        6,
-                                        {
-                                          "Fn::Split": [
-                                            ":",
-                                            {
-                                              "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        ]
-                      },
-                      ":password-??????"
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":secretsmanager:us-east-1:329511059546:secret:",
-                      {
-                        "Fn::Join": [
-                          "-",
-                          [
-                            {
-                              "Fn::Select": [
-                                0,
-                                {
-                                  "Fn::Split": [
-                                    "-",
-                                    {
-                                      "Fn::Select": [
-                                        6,
-                                        {
-                                          "Fn::Split": [
-                                            ":",
-                                            {
-                                              "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            },
-                            {
-                              "Fn::Select": [
-                                1,
-                                {
-                                  "Fn::Split": [
-                                    "-",
-                                    {
-                                      "Fn::Select": [
-                                        6,
-                                        {
-                                          "Fn::Split": [
-                                            ":",
-                                            {
-                                              "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    }
-                                  ]
-                                }
-                              ]
-                            }
-                          ]
-                        ]
-                      },
-                      ":dbname-??????"
-                    ]
-                  ]
-                }
-              ]
-            },
-            {
-              "Action": [
-                "logs:CreateLogGroup",
-                "logs:CreateLogStream",
-                "logs:PutLogEvents"
-              ],
-              "Effect": "Allow",
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":logs:us-east-1:329511059546:log-group:/aws/codebuild/",
-                      {
-                        "Ref": "Tier1CodebuildProject9F849C9E"
-                      }
-                    ]
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":logs:us-east-1:329511059546:log-group:/aws/codebuild/",
-                      {
-                        "Ref": "Tier1CodebuildProject9F849C9E"
-                      },
-                      ":*"
-                    ]
-                  ]
-                }
-              ]
-            },
-            {
-              "Action": [
-                "codebuild:CreateReportGroup",
-                "codebuild:CreateReport",
-                "codebuild:UpdateReport",
-                "codebuild:BatchPutTestCases",
-                "codebuild:BatchPutCodeCoverages"
-              ],
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::Join": [
-                  "",
-                  [
-                    "arn:",
-                    {
-                      "Ref": "AWS::Partition"
-                    },
-                    ":codebuild:us-east-1:329511059546:report-group/",
-                    {
-                      "Ref": "Tier1CodebuildProject9F849C9E"
-                    },
-                    "-*"
-                  ]
-                ]
-              }
-            },
-            {
-              "Action": [
-                "s3:GetObject*",
-                "s3:GetBucket*",
-                "s3:List*",
-                "s3:DeleteObject*",
-                "s3:PutObject",
-                "s3:Abort*"
-              ],
-              "Effect": "Allow",
-              "Resource": [
-                {
-                  "Fn::GetAtt": [
-                    "PipelineBucketB967BD35",
-                    "Arn"
-                  ]
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      {
-                        "Fn::GetAtt": [
-                          "PipelineBucketB967BD35",
-                          "Arn"
-                        ]
-                      },
-                      "/*"
-                    ]
-                  ]
-                }
-              ]
-            },
-            {
-              "Action": "codestar-connections:UseConnection",
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputFnGetAttCodeStarConnectionConnectionArnAF592991"
-              }
-            }
-          ],
-          "Version": "2012-10-17"
-        },
-        "PolicyName": "Tier1CodebuildServiceRoleDefaultPolicyD277210C",
-        "Roles": [
-          {
-            "Ref": "Tier1CodebuildServiceRole4A88A455"
-          }
-        ]
-      },
-      "Metadata": {
-        "aws:cdk:path": "JVSANTOSTier1CICDAwsArchitectureStack/Tier1CodebuildServiceRole/DefaultPolicy/Resource"
-      }
-    },
-    "Tier1CodebuildPolicy80356601": {
+    "JVSANTOSTier1CodebuildPolicy": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
@@ -712,7 +303,7 @@
               "Action": "secretsmanager:GetSecretValue",
               "Effect": "Allow",
               "Resource": {
-                "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
+                "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:OutputJVSANTOSTier1RDSSecret"
               }
             },
             {
@@ -755,18 +346,15 @@
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "codebuild-policy",
+        "PolicyName": "JVSANTOS-codebuild-policy",
         "Roles": [
           {
-            "Ref": "Tier1CodebuildServiceRole4A88A455"
+            "Ref": "JVSANTOSTier1CodebuildServiceRole"
           }
         ]
       },
-      "Metadata": {
-        "aws:cdk:path": "JVSANTOSTier1CICDAwsArchitectureStack/Tier1CodebuildPolicy/Resource"
-      }
     },
-    "Tier1CodebuildProject9F849C9E": {
+    "JVSANTOSTier1CodebuildProject": {
       "Type": "AWS::CodeBuild::Project",
       "Properties": {
         "Artifacts": {
@@ -799,7 +387,7 @@
                                         "Fn::Split": [
                                           ":",
                                           {
-                                            "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
+                                            "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:OutputJVSANTOSTier1RDSSecret"
                                           }
                                         ]
                                       }
@@ -822,7 +410,7 @@
                                         "Fn::Split": [
                                           ":",
                                           {
-                                            "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
+                                            "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:OutputJVSANTOSTier1RDSSecret"
                                           }
                                         ]
                                       }
@@ -864,7 +452,7 @@
                                         "Fn::Split": [
                                           ":",
                                           {
-                                            "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
+                                            "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:OutputJVSANTOSTier1RDSSecret"
                                           }
                                         ]
                                       }
@@ -887,7 +475,7 @@
                                         "Fn::Split": [
                                           ":",
                                           {
-                                            "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
+                                            "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:OutputJVSANTOSTier1RDSSecret"
                                           }
                                         ]
                                       }
@@ -929,7 +517,7 @@
                                         "Fn::Split": [
                                           ":",
                                           {
-                                            "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
+                                            "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:OutputJVSANTOSTier1RDSSecret"
                                           }
                                         ]
                                       }
@@ -952,7 +540,7 @@
                                         "Fn::Split": [
                                           ":",
                                           {
-                                            "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
+                                            "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:OutputJVSANTOSTier1RDSSecret"
                                           }
                                         ]
                                       }
@@ -994,7 +582,7 @@
                                         "Fn::Split": [
                                           ":",
                                           {
-                                            "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
+                                            "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:OutputJVSANTOSTier1RDSSecret"
                                           }
                                         ]
                                       }
@@ -1017,7 +605,7 @@
                                         "Fn::Split": [
                                           ":",
                                           {
-                                            "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1RDSSecret6A92FA055BE7C916"
+                                            "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:OutputJVSANTOSTier1RDSSecret"
                                           }
                                         ]
                                       }
@@ -1048,7 +636,7 @@
         },
         "ServiceRole": {
           "Fn::GetAtt": [
-            "Tier1CodebuildServiceRole4A88A455",
+            "JVSANTOSTier1CodebuildServiceRole",
             "Arn"
           ]
         },
@@ -1057,24 +645,21 @@
           "Type": "CODEPIPELINE"
         },
         "EncryptionKey": "alias/aws/s3",
-        "Name": "Tier1",
+        "Name": "JVSANTOSTier1",
         "Tags": [
           {
-            "Key": "Application",
-            "Value": "JVSANTOSTier1"
+            "Key": "Name",
+            "Value": "jvsantos.tier1"
           }
         ]
       },
-      "Metadata": {
-        "aws:cdk:path": "JVSANTOSTier1CICDAwsArchitectureStack/Tier1CodebuildProject/Resource"
-      }
     },
-    "CodePipelineTier16420E750": {
+    "JVSANTOSCodePipelineTier1": {
       "Type": "AWS::CodePipeline::Pipeline",
       "Properties": {
         "RoleArn": {
           "Fn::GetAtt": [
-            "Tier1PipelineServiceRoleED1C357E",
+            "JVSANTOSTier1PipelineServiceRole",
             "Arn"
           ]
         },
@@ -1090,9 +675,9 @@
                 },
                 "Configuration": {
                   "ConnectionArn": {
-                    "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputFnGetAttCodeStarConnectionConnectionArnAF592991"
+                    "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:JVSANTOSCodeStarConnectionConnectionArn"
                   },
-                  "FullRepositoryId": "Jayvee1413/tier1",
+                  "FullRepositoryId": "Jayvee1413/santos-devops-challenge-tier1",
                   "BranchName": "master",
                   "OutputArtifactFormat": "CODEBUILD_CLONE_REF"
                 },
@@ -1104,7 +689,7 @@
                 ],
                 "RoleArn": {
                   "Fn::GetAtt": [
-                    "CodePipelineTier1SourceGithubCodePipelineActionRole13076323",
+                    "JVSANTOSCodePipelineTier1SourceGithubCodePipelineActionRole",
                     "Arn"
                   ]
                 },
@@ -1124,7 +709,7 @@
                 },
                 "Configuration": {
                   "ProjectName": {
-                    "Ref": "Tier1CodebuildProject9F849C9E"
+                    "Ref": "JVSANTOSTier1CodebuildProject"
                   }
                 },
                 "InputArtifacts": [
@@ -1140,7 +725,7 @@
                 ],
                 "RoleArn": {
                   "Fn::GetAtt": [
-                    "CodePipelineTier1BuildcodebuildCodePipelineActionRole84C0E072",
+                    "JVSANTOSCodePipelineTier1BuildcodebuildCodePipelineActionRole",
                     "Arn"
                   ]
                 },
@@ -1159,8 +744,8 @@
                   "Version": "1"
                 },
                 "Configuration": {
-                  "ApplicationName": "Tier1 Application",
-                  "EnvironmentName": "Tier1-Environment"
+                  "ApplicationName": "JVSANTOS Tier1 Application",
+                  "EnvironmentName": "JVSANTOS-Tier1-Environment"
                 },
                 "InputArtifacts": [
                   {
@@ -1170,7 +755,7 @@
                 "Name": "Deploy",
                 "RoleArn": {
                   "Fn::GetAtt": [
-                    "Tier1PipelineServiceRoleED1C357E",
+                    "JVSANTOSTier1PipelineServiceRole",
                     "Arn"
                   ]
                 },
@@ -1182,27 +767,24 @@
         ],
         "ArtifactStore": {
           "Location": {
-            "Ref": "PipelineBucketB967BD35"
+            "Ref": "JVSANTOSPipelineBucket"
           },
           "Type": "S3"
         },
         "Name": "jvsantos-pipeline-tier1",
         "Tags": [
           {
-            "Key": "Application",
-            "Value": "JVSANTOSTier1"
+            "Key": "Name",
+            "Value": "jvsantos.tier1"
           }
         ]
       },
       "DependsOn": [
-        "Tier1PipelineServiceRoleDefaultPolicy9DCD44EB",
-        "Tier1PipelineServiceRoleED1C357E"
+        "JVSANTOSTier1PipelineServiceRoleDefaultPolicy",
+        "JVSANTOSTier1PipelineServiceRole"
       ],
-      "Metadata": {
-        "aws:cdk:path": "JVSANTOSTier1CICDAwsArchitectureStack/CodePipelineTier1/Resource"
-      }
     },
-    "CodePipelineTier1SourceGithubCodePipelineActionRole13076323": {
+    "JVSANTOSCodePipelineTier1SourceGithubCodePipelineActionRole": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -1211,17 +793,17 @@
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
               "Principal": {
-                "AWS": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":iam::329511059546:root"
-                    ]
-                  ]
+                "AWS": {  
+                   "Fn::Join":[  
+                      ":",
+                      [  
+                         "arn:aws:iam:",
+                         {  
+                            "Ref":"AWS::AccountId"
+                         },
+                         "root"
+                      ]
+                   ]
                 }
               }
             }
@@ -1230,16 +812,13 @@
         },
         "Tags": [
           {
-            "Key": "Application",
-            "Value": "JVSANTOSTier1"
+            "Key": "Name",
+            "Value": "jvsantos.tier1"
           }
         ]
       },
-      "Metadata": {
-        "aws:cdk:path": "JVSANTOSTier1CICDAwsArchitectureStack/CodePipelineTier1/Source/Github/CodePipelineActionRole/Resource"
-      }
     },
-    "CodePipelineTier1SourceGithubCodePipelineActionRoleDefaultPolicy11040E4C": {
+    "JVSANTOSCodePipelineTier1SourceGithubCodePipelineActionRoleDefaultPolicy": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
@@ -1248,7 +827,7 @@
               "Action": "codestar-connections:UseConnection",
               "Effect": "Allow",
               "Resource": {
-                "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputFnGetAttCodeStarConnectionConnectionArnAF592991"
+                "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:JVSANTOSCodeStarConnectionConnectionArn"
               }
             },
             {
@@ -1264,7 +843,7 @@
               "Resource": [
                 {
                   "Fn::GetAtt": [
-                    "PipelineBucketB967BD35",
+                    "JVSANTOSPipelineBucket",
                     "Arn"
                   ]
                 },
@@ -1274,7 +853,7 @@
                     [
                       {
                         "Fn::GetAtt": [
-                          "PipelineBucketB967BD35",
+                          "JVSANTOSPipelineBucket",
                           "Arn"
                         ]
                       },
@@ -1287,18 +866,15 @@
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "CodePipelineTier1SourceGithubCodePipelineActionRoleDefaultPolicy11040E4C",
+        "PolicyName": "JVSANTOSCodePipelineTier1SourceGithubCodePipelineActionRoleDefaultPolicy",
         "Roles": [
           {
-            "Ref": "CodePipelineTier1SourceGithubCodePipelineActionRole13076323"
+            "Ref": "JVSANTOSCodePipelineTier1SourceGithubCodePipelineActionRole"
           }
         ]
       },
-      "Metadata": {
-        "aws:cdk:path": "JVSANTOSTier1CICDAwsArchitectureStack/CodePipelineTier1/Source/Github/CodePipelineActionRole/DefaultPolicy/Resource"
-      }
     },
-    "CodePipelineTier1BuildcodebuildCodePipelineActionRole84C0E072": {
+    "JVSANTOSCodePipelineTier1BuildcodebuildCodePipelineActionRole": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -1307,17 +883,17 @@
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
               "Principal": {
-                "AWS": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition"
-                      },
-                      ":iam::329511059546:root"
-                    ]
-                  ]
+                                "AWS": {  
+                   "Fn::Join":[  
+                      ":",
+                      [  
+                         "arn:aws:iam:",
+                         {  
+                            "Ref":"AWS::AccountId"
+                         },
+                         "root"
+                      ]
+                   ]
                 }
               }
             }
@@ -1326,16 +902,13 @@
         },
         "Tags": [
           {
-            "Key": "Application",
-            "Value": "JVSANTOSTier1"
+            "Key": "Name",
+            "Value": "jvsantos.tier1"
           }
         ]
       },
-      "Metadata": {
-        "aws:cdk:path": "JVSANTOSTier1CICDAwsArchitectureStack/CodePipelineTier1/Build/codebuild/CodePipelineActionRole/Resource"
-      }
     },
-    "CodePipelineTier1BuildcodebuildCodePipelineActionRoleDefaultPolicyDF117C31": {
+    "JVSANTOSCodePipelineTier1BuildcodebuildCodePipelineActionRoleDefaultPolicy": {
       "Type": "AWS::IAM::Policy",
       "Properties": {
         "PolicyDocument": {
@@ -1349,7 +922,7 @@
               "Effect": "Allow",
               "Resource": {
                 "Fn::GetAtt": [
-                  "Tier1CodebuildProject9F849C9E",
+                  "JVSANTOSTier1CodebuildProject",
                   "Arn"
                 ]
               }
@@ -1357,25 +930,13 @@
           ],
           "Version": "2012-10-17"
         },
-        "PolicyName": "CodePipelineTier1BuildcodebuildCodePipelineActionRoleDefaultPolicyDF117C31",
+        "PolicyName": "JVSANTOSCodePipelineTier1BuildcodebuildCodePipelineActionRoleDefaultPolicy",
         "Roles": [
           {
-            "Ref": "CodePipelineTier1BuildcodebuildCodePipelineActionRole84C0E072"
+            "Ref": "JVSANTOSCodePipelineTier1BuildcodebuildCodePipelineActionRole"
           }
         ]
       },
-      "Metadata": {
-        "aws:cdk:path": "JVSANTOSTier1CICDAwsArchitectureStack/CodePipelineTier1/Build/codebuild/CodePipelineActionRole/DefaultPolicy/Resource"
-      }
     },
-    "CDKMetadata": {
-      "Type": "AWS::CDK::Metadata",
-      "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAACkWNTQqDQAyFz9L9GBG7sLtSLyD2BDamNDpOZH4oMszdi47Q1fvC+x6p4HaF6nIfvq7AcS4jiiWITz/grFoxztuAXrVv05OTYJGS2t3oaoiPgDMdZaakeFgg9qLpWOzZiWbc9jNTUigjvQLrEWLHK2k21FmZKL85MWvr2f/NQzk5paS6zX/ElDU00Fwmx1zYYDwvBH3OH7p15oLhAAAA"
-      },
-      "Metadata": {
-        "aws:cdk:path": "JVSANTOSTier1CICDAwsArchitectureStack/CDKMetadata/Default"
-      }
-    }
   }
 }

@@ -1,6 +1,6 @@
 {
   "Resources": {
-    "Tier1BeanstalkInstanceProfileRole25F1788E": {
+    "JVSANTOSTier1BeanstalkInstanceProfileRole": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -32,16 +32,13 @@
         "RoleName": "JVSANTOSTier1BeanstalkInstanceProfileRole",
         "Tags": [
           {
-            "Key": "Application",
-            "Value": "JVSANTOSTier1"
+            "Key": "Name",
+            "Value": "jvsantos.tier1"
           }
         ]
       },
-      "Metadata": {
-        "aws:cdk:path": "JVSANTOSTier1BeanstalkAwsArchitectureStack/Tier1BeanstalkInstanceProfileRole/Resource"
-      }
     },
-    "Tier1BeanstalkServiceRole00DAA13C": {
+    "JVSANTOSTier1BeanstalkServiceRole": {
       "Type": "AWS::IAM::Role",
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -85,50 +82,41 @@
         "RoleName": "JVSANTOSTier1BeanstalkServiceRole",
         "Tags": [
           {
-            "Key": "Application",
-            "Value": "JVSANTOSTier1"
+            "Key": "Name",
+            "Value": "jvsantos.tier1"
           }
         ]
       },
-      "Metadata": {
-        "aws:cdk:path": "JVSANTOSTier1BeanstalkAwsArchitectureStack/Tier1BeanstalkServiceRole/Resource"
-      }
     },
-    "Tier1BeanstalkAppInstanceProfile": {
+    "JVSANTOSTier1BeanstalkAppInstanceProfile": {
       "Type": "AWS::IAM::InstanceProfile",
       "Properties": {
         "Roles": [
           {
-            "Ref": "Tier1BeanstalkInstanceProfileRole25F1788E"
+            "Ref": "JVSANTOSTier1BeanstalkInstanceProfileRole"
           }
         ],
         "InstanceProfileName": "JVSANTOSTier1BeanstalkAppInstanceProfile"
       },
-      "Metadata": {
-        "aws:cdk:path": "JVSANTOSTier1BeanstalkAwsArchitectureStack/Tier1BeanstalkAppInstanceProfile"
-      }
     },
-    "Tier1BeanstalkApplication": {
+    "JVSANTOSTier1BeanstalkApplication": {
       "Type": "AWS::ElasticBeanstalk::Application",
       "Properties": {
-        "ApplicationName": "Tier1 Application"
+        "ApplicationName": "JVSANTOS Tier1 Application"
       },
-      "Metadata": {
-        "aws:cdk:path": "JVSANTOSTier1BeanstalkAwsArchitectureStack/Tier1BeanstalkApplication"
-      }
     },
-    "BeanstalkEnvironment": {
+    "JVSANTOSTier1BeanstalkEnvironment": {
       "Type": "AWS::ElasticBeanstalk::Environment",
       "Properties": {
-        "ApplicationName": "Tier1 Application",
-        "EnvironmentName": "Tier1-Environment",
+        "ApplicationName": "JVSANTOS Tier1 Application",
+        "EnvironmentName": "JVSANTOS-Tier1-Environment",
         "OptionSettings": [
           {
             "Namespace": "aws:autoscaling:launchconfiguration",
             "OptionName": "IamInstanceProfile",
             "Value": {
               "Fn::GetAtt": [
-                "Tier1BeanstalkAppInstanceProfile",
+                "JVSANTOSTier1BeanstalkAppInstanceProfile",
                 "Arn"
               ]
             }
@@ -137,7 +125,7 @@
             "Namespace": "aws:ec2:vpc",
             "OptionName": "VPCId",
             "Value": {
-              "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1VPC4AEDEE1E826FF0C2"
+              "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:OutputJVSANTOSTier1VPC"
             }
           },
           {
@@ -148,15 +136,15 @@
                 "",
                 [
                   {
-                    "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1VPCPrivateSubnet1SubnetDB2077AF56606861"
+                    "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:OutputJVSANTOSTier1VPCPrivateSubnet1"
                   },
                   ",",
                   {
-                    "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1VPCPrivateSubnet2Subnet761294B6BB18A85F"
+                    "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:OutputJVSANTOSTier1VPCPrivateSubnet2"
                   },
                   ",",
                   {
-                    "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1VPCPrivateSubnet3SubnetE32EBA39DED86AAB"
+                    "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:OutputJVSANTOSTier1VPCPrivateSubnet3"
                   }
                 ]
               ]
@@ -170,15 +158,15 @@
                 "",
                 [
                   {
-                    "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1VPCPublicSubnet1SubnetFD94A3A661F79D3A"
+                    "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:OutputJVSANTOSTier1VPCPublicSubnet1"
                   },
                   ",",
                   {
-                    "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1VPCPublicSubnet2Subnet972CA01AF714AC0E"
+                    "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:OutputJVSANTOSTier1VPCPublicSubnet2"
                   },
                   ",",
                   {
-                    "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1VPCPublicSubnet3SubnetF783E89056321B68"
+                    "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:OutputJVSANTOSTier1VPCPublicSubnet3"
                   }
                 ]
               ]
@@ -192,15 +180,15 @@
                 "",
                 [
                   {
-                    "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1VPCIsolatedSubnet1Subnet7F144BE8A93EDDAE"
+                    "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:OutputJVSANTOSTier1VPCIsolatedSubnet1"
                   },
                   ",",
                   {
-                    "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1VPCIsolatedSubnet2SubnetD1D87E0926C244FD"
+                    "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:OutputJVSANTOSTier1VPCIsolatedSubnet2"
                   },
                   ",",
                   {
-                    "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1VPCIsolatedSubnet3Subnet633096C15F2A7CFF"
+                    "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:OutputJVSANTOSTier1VPCIsolatedSubnet3"
                   }
                 ]
               ]
@@ -210,14 +198,14 @@
             "Namespace": "aws:autoscaling:launchconfiguration",
             "OptionName": "SecurityGroups",
             "Value": {
-              "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputFnGetAttBeanstalkApplicationSG52223C1FGroupId191ECD2C"
+              "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:OutputJVSANTOSBeanstalkApplicationSGGroupId"
             }
           },
           {
             "Namespace": "aws:elbv2:loadbalancer",
             "OptionName": "SecurityGroups",
             "Value": {
-              "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputFnGetAttBeanstalkApplicationLoadBalancerSGF15D451CGroupIdAC8ED97D"
+              "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:OutputJVSANTOSBeanstalkApplicationLoadBalancerSGGroupId"
             }
           },
           {
@@ -229,7 +217,7 @@
             "Namespace": "aws:elasticbeanstalk:environment",
             "OptionName": "ServiceRole",
             "Value": {
-              "Ref": "Tier1BeanstalkServiceRole00DAA13C"
+              "Ref": "JVSANTOSTier1BeanstalkServiceRole"
             }
           },
           {
@@ -281,7 +269,7 @@
             "Namespace": "aws:elbv2:listener:443",
             "OptionName": "SSLCertificateArns",
             "Value": {
-              "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:ExportsOutputRefTier1ACMCertificate95EAA15BF9B6C393"
+              "Fn::ImportValue": "JVSANTOSTier1VPCAwsArchitectureStack:OutputJVSANTOSTier1ACMCertificate"
             }
           },
           {
@@ -298,46 +286,26 @@
         "SolutionStackName": "64bit Amazon Linux 2 v5.3.0 running Node.js 14",
         "Tags": [
           {
-            "Key": "Application",
-            "Value": "JVSANTOSTier1"
+            "Key": "Name",
+            "Value": "jvsantos.tier1"
           }
         ]
       },
       "DependsOn": [
-        "Tier1BeanstalkApplication"
+        "JVSANTOSTier1BeanstalkApplication"
       ],
-      "Metadata": {
-        "aws:cdk:path": "JVSANTOSTier1BeanstalkAwsArchitectureStack/BeanstalkEnvironment"
-      }
     },
-    "CDKMetadata": {
-      "Type": "AWS::CDK::Metadata",
-      "Properties": {
-        "Analytics": "v2:deflate64:H4sIAAAAAAAACi2LQQ6CMBBFz8K+lBBd4E5DXLiS4AlqHeJImSHtVGOa3l1QVy/57/1a77a6LvbmFUp7G6tk2YNOFzF2VO1A5yhzFNUyBfHRyrr1EDh6C1mtr4Rm0qlnB1/352npDVnoPA/olhScCYL2CmY1btRpqQ7z7NAaQab1dKQneqYJSHLOqnvLnana6EY3xSMglj6S4AS6//ED3BFVyL0AAAA="
-      },
-      "Metadata": {
-        "aws:cdk:path": "JVSANTOSTier1BeanstalkAwsArchitectureStack/CDKMetadata/Default"
-      }
-    }
   },
   "Outputs": {
-    "EBURL": {
+    "OutputJVSANTOSTier1BeanstalkEnvironmentEndpointURL": {
       "Value": {
         "Fn::GetAtt": [
-          "BeanstalkEnvironment",
-          "EndpointURL"
-        ]
-      }
-    },
-    "ExportsOutputFnGetAttBeanstalkEnvironmentEndpointURL7DF3B919": {
-      "Value": {
-        "Fn::GetAtt": [
-          "BeanstalkEnvironment",
+          "JVSANTOSTier1BeanstalkEnvironment",
           "EndpointURL"
         ]
       },
       "Export": {
-        "Name": "JVSANTOSTier1BeanstalkAwsArchitectureStack:ExportsOutputFnGetAttBeanstalkEnvironmentEndpointURL7DF3B919"
+        "Name": "JVSANTOSTier1BeanstalkAwsArchitectureStack:OutputJVSANTOSTier1BeanstalkEnvironmentEndpointURL"
       }
     }
   }

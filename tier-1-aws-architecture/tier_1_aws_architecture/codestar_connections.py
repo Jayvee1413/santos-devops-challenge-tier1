@@ -3,7 +3,7 @@ from aws_cdk import aws_codestarconnections as codestarconnection
 
 def generate_codestar_connection(scope):
     codestar_connection = codestarconnection.CfnConnection(scope=scope,
-                                                           id="CodeStarConnection",
+                                                           id="JVSANTOSCodeStarConnection",
                                                            connection_name="jvsantos",
                                                            provider_type="GitHub"
                                                            )

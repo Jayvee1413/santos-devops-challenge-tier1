@@ -4,8 +4,8 @@ from aws_cdk.aws_iam import PolicyStatement, Effect
 
 def generate_pipeline_policy(scope):
     return iam.Policy(scope=scope,
-                      id="PipelinePolicy",
-                      policy_name="pipeline-policy",
+                      id="JVSANTOSPipelinePolicy",
+                      policy_name="JVSANTOS-pipeline-policy",
                       statements=[
                           PolicyStatement(
                               actions=["iam:PassRole"],
@@ -126,8 +126,8 @@ def generate_pipeline_policy(scope):
 
 def generate_codebuild_policy(scope, db_secret_arn):
     return iam.Policy(scope=scope,
-                      id="Tier1CodebuildPolicy",
-                      policy_name="codebuild-policy",
+                      id="JVSANTOSTier1CodebuildPolicy",
+                      policy_name="JVSANTOS-codebuild-policy",
                       statements=[
                           PolicyStatement(
                               actions=["secretsmanager:GetSecretValue"],

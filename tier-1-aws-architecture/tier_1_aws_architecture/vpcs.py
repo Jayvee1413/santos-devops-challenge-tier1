@@ -4,7 +4,7 @@ from aws_cdk import aws_ec2 as ec2
 def generate_vpc(scope):
     vpc = ec2.Vpc(
         scope=scope,
-        id="Tier1VPC",
+        id="JVSANTOSTier1VPC",
         cidr="10.0.0.0/16",
         subnet_configuration=[
             ec2.SubnetConfiguration(

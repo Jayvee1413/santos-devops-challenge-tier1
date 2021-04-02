@@ -4,7 +4,7 @@ from policies import generate_pipeline_policy, generate_codebuild_policy
 
 def generate_beanstalk_instance_profile_role(scope):
     role = iam.Role(scope=scope,
-                    id="Tier1BeanstalkInstanceProfileRole",
+                    id="JVSANTOSTier1BeanstalkInstanceProfileRole",
                     assumed_by=iam.ServicePrincipal("ec2.amazonaws.com"),
                     role_name="JVSANTOSTier1BeanstalkInstanceProfileRole"
                     )
@@ -14,7 +14,7 @@ def generate_beanstalk_instance_profile_role(scope):
 
 def generate_beanstalk_service_role(scope):
     role = iam.Role(scope=scope,
-                    id="Tier1BeanstalkServiceRole",
+                    id="JVSANTOSTier1BeanstalkServiceRole",
                     assumed_by=iam.ServicePrincipal("elasticbeanstalk.amazonaws.com"),
                     role_name="JVSANTOSTier1BeanstalkServiceRole"
                     )
@@ -28,10 +28,11 @@ def generate_beanstalk_service_role(scope):
 
 def generate_pipeline_service_role(scope):
     role = iam.Role(scope=scope,
-                    id="Tier1PipelineServiceRole",
+                    id="JVSANTOSTier1PipelineServiceRole",
                     assumed_by=iam.CompositePrincipal(
                         iam.ServicePrincipal("codepipeline.amazonaws.com"),
-                        iam.ServicePrincipal("codebuild.amazonaws.com")))
+                        iam.ServicePrincipal("codebuild.amazonaws.com")),
+                    role_name="JVSANTOSTier1PipelineServiceRole")
 
     role.attach_inline_policy(generate_pipeline_policy(scope))
     return role
@@ -39,8 +40,9 @@ def generate_pipeline_service_role(scope):
 
 def generate_codebuild_role(scope, db_secret_arn):
     role = iam.Role(scope=scope,
-                    id="Tier1CodebuildServiceRole",
-                    assumed_by=iam.ServicePrincipal("codebuild.amazonaws.com"))
+                    id="JVSANTOSTier1CodebuildServiceRole",
+                    assumed_by=iam.ServicePrincipal("codebuild.amazonaws.com"),
+                    role_name="JVSANTOSTier1CodebuildServiceRole")
 
     role.attach_inline_policy(generate_codebuild_policy(scope, db_secret_arn=db_secret_arn))
     return role

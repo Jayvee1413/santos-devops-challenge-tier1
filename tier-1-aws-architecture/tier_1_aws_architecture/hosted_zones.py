@@ -4,7 +4,7 @@ import aws_cdk.aws_route53_targets as targets
 
 def generate_lookedup_hosted_zone(scope):
     hosted_zone = route53.HostedZone.from_lookup(scope=scope,
-                                                 id="Tier1HostedZone",
+                                                 id="JVSANTOSTier1HostedZone",
                                                  domain_name="apperdevops.com")
 
     return hosted_zone

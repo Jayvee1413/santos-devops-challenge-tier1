@@ -52,7 +52,7 @@ class Tier1VPCAwsArchitectureStack(cdk.Stack):
 
         self.hosted_zone = generate_lookedup_hosted_zone(scope=self)
         self.acm_certificate = generate_acm_certificate(scope=self, hosted_zone=self.hosted_zone)
-        Tags.of(scope).add("Application", "JVSANTOSTier1")
+        Tags.of(scope).add("Name", "jvsantos.tier1")
 
 
 class Tier1BeanstalkAwsArchitectureStack(cdk.Stack):
@@ -84,10 +84,10 @@ class Tier1BeanstalkAwsArchitectureStack(cdk.Stack):
         self.beanstalk_environment.add_depends_on(self.beanstalk_application)
 
         core.CfnOutput(
-            scope=self, id="EBURL", value=self.beanstalk_environment.attr_endpoint_url
+            scope=self, id="JVSantosTier1ElasticBeanstalkURL", value=self.beanstalk_environment.attr_endpoint_url
         )
 
-        Tags.of(scope).add("Application", "JVSANTOSTier1")
+        Tags.of(scope).add("Name", "jvsantos.tier1")
 
 
 class Tier1CICDAwsArchitectureStack(cdk.Stack):
@@ -105,11 +105,13 @@ class Tier1CICDAwsArchitectureStack(cdk.Stack):
         # Codebuild Project Creation
         codebuild_project = generate_codebuild_project(scope=self, db_secret=vpc_stack.db_secret, role=codebuild_role)
 
-        generate_pipeline(scope=self, bucket=pipeline_bucket, role=pipeline_service_role,
+        pipeline = generate_pipeline(scope=self, bucket=pipeline_bucket, role=pipeline_service_role,
                           codebuild_project=codebuild_project,
                           beanstalk_environment=beanstalk_stack.beanstalk_environment,
                           beanstalk_application=beanstalk_stack.beanstalk_application,
                           codestar_connection=vpc_stack.codestar_connection)
+
+        Tags.of(scope).add("Name", "jvsantos.tier1")
 
 
 class Tier1CDNAwsArchitectureStack(cdk.Stack):
@@ -117,12 +119,12 @@ class Tier1CDNAwsArchitectureStack(cdk.Stack):
     def __init__(self, scope: cdk.Construct, construct_id: str, beanstalk_stack, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
-        core.CfnOutput(
-            scope=self, id="EBURL", value=beanstalk_stack.beanstalk_environment.attr_endpoint_url
-        )
-
         cloudfront_distribution = generate_cloudfront_distribution(scope=self,
                                                                    certificate=beanstalk_stack.vpc_stack.acm_certificate,
                                                                    beanstalk_url=beanstalk_stack.beanstalk_environment.attr_endpoint_url)
-        generate_record_in_hosted_zone(scope=self, hosted_zone=beanstalk_stack.vpc_stack.hosted_zone,
+        record = generate_record_in_hosted_zone(scope=self, hosted_zone=beanstalk_stack.vpc_stack.hosted_zone,
                                        cloudfront_distribution=cloudfront_distribution)
+        core.CfnOutput(
+            scope=self, id="JVSantosTier1Domain", value=record.domain_name
+        )
+        Tags.of(scope).add("Name", "jvsantos.tier1")

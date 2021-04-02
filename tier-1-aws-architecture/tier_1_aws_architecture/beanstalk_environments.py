@@ -5,8 +5,8 @@ from aws_cdk import aws_iam as iam
 
 def generate_beanstalk_application(scope):
     app = beanstalk.CfnApplication(scope=scope,
-                                   id="Tier1BeanstalkApplication",
-                                   application_name="Tier1 Application")
+                                   id="JVSANTOSTier1BeanstalkApplication",
+                                   application_name="JVSANTOS Tier1 Application")
 
     return app
 
@@ -88,8 +88,8 @@ def generate_beanstalk_environment(scope, beanstalk_app: beanstalk.CfnApplicatio
                ]
 
     environment = beanstalk.CfnEnvironment(scope=scope,
-                                           id="BeanstalkEnvironment",
-                                           environment_name="Tier1-Environment",
+                                           id="JVSANTOSTier1BeanstalkEnvironment",
+                                           environment_name="JVSANTOS-Tier1-Environment",
                                            application_name=beanstalk_app.application_name,
                                            solution_stack_name="64bit Amazon Linux 2 v5.3.0 running Node.js 14",
                                            option_settings=options,

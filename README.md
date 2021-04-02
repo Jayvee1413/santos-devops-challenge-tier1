@@ -1,19 +1,9 @@
 # santos-devops-challenge-tier-1
 
-This project is made mainly with AWS CDK to generate the Cloudformation Templates for the Apper Devops Challenge Tier 1.
-The synthesized Cloudformation templates are also included in this repository.
+The Cloudformation Templates are in `cfn_templates`
 
-To run the CDK:
-1. NPM should be installed
-2. Install AWS CDK via `npm install aws-cdk@1.94.1`
-3. Create a Python virtual environment
-4. Install requirements.txt in `tier_1_aws_architecture`
-5. Bootstap your AWS Account: `cdk bootstrap --profile <aws_profile>`
-6. Run the following in order (while in `tier_1_aws_architecture subdirectory`:
-    1. `cdk deploy JVSANTOSTier1VPCAwsArchitectureStack --profile <aws_profile>`
-    2. Enable the generated CodeStar Connection in the AWS Console
-    3. `cdk deploy JVSANTOSTier1BeanstalkAwsArchitectureStack --profile <aws_profile>`
-    4. `cdk deploy JVSANTOSTier1CICDAwsArchitectureStack --profile <aws_profile>`
-    5. `cdk deploy JVSANTOSTier1CDNAwsArchitectureStack --profile <aws_profile>`
-7. If you just want to create the cloudformation templates, just run `cdk synth --profile <aws_profile> --all` 
-   and the generated Cloudformation templates will be in `tier_1_aws_architecture/cdk.out`
+1. VPC Stack: `aws cloudformation deploy --template cfn_templates/JVSANTOSTier1VPCAwsArchitectureStack.json --stack-name JVSANTOSTier1VPCAwsArchitectureStack --capabilities CAPABILITY_IAM --profile <profile_name> --region ap-southeast-1`
+2. Update CodeStar Connection via the AWS Console
+3. Beanstalk Stack: `aws cloudformation deploy --template cfn_templates\JVSANTOSTier1BeanstalkAwsArchitectureStack.json --stack-name JVSANTOSTier1BeanstalkAwsArchitectureStack --capabilities CAPABILITY_NAMED_IAM --profile apper --region ap-southeast-1`
+4. Beanstalk Stack: `aws cloudformation deploy --template cfn_templates\JVSANTOSTier1CICDAwsArchitectureStack.json --stack-name JVSANTOSTier1CICDAwsArchitectureStack --capabilities CAPABILITY_NAMED_IAM --profile apper --region ap-southeast-1`
+5. CDN Stack: `aws cloudformation deploy --template cfn_templates\JVSANTOSTier1CDNAwsArchitectureStack.json --stack-name JVSANTOSTier1CDNAwsArchitectureStack --capabilities CAPABILITY_NAMED_IAM --profile apper --region ap-southeast-1`
